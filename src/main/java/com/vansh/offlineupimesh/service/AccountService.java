@@ -1,6 +1,7 @@
 package com.vansh.offlineupimesh.service;
 
 import com.vansh.offlineupimesh.entity.Account;
+import com.vansh.offlineupimesh.exception.AccountNotFoundException;
 import com.vansh.offlineupimesh.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +46,11 @@ public class AccountService {
         Account savedAccount = accountRepository.save(account);
 
         return savedAccount;
+    }
+
+    public Account getAccount(Long id) {
+        return accountRepository.findById(id)
+                .orElseThrow(() -> new AccountNotFoundException("Account Not Found"));
     }
 
 }
