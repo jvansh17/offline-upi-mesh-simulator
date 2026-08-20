@@ -13,4 +13,10 @@ public class GlobalExceptionHandler {
     public String handleAccountNotFound(AccountNotFoundException exception) {
         return exception.getMessage();
     }
+
+    @ExceptionHandler(InvalidAmountException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleInvalidAmount(InvalidAmountException exception) {
+        return exception.getMessage();
+    }
 }

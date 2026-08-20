@@ -58,5 +58,9 @@ public class Account {
         this.accountNumber = accountNumber;
     }
 
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
     // toString()
 }
