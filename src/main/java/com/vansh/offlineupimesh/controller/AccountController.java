@@ -41,4 +41,14 @@ public class AccountController {
                 request.getAmount()
         );
     }
+
+    @PostMapping("/{accountNumber}/withdraw")
+    public Account withdrawMoney(
+            @PathVariable("accountNumber") String accountNumber,
+            @RequestBody DepositRequest request) {
+        return accountService.withdrawMoney(
+                accountNumber,
+                request.getAmount()
+        );
+    }
 }

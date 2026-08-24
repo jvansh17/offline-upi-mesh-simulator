@@ -3,6 +3,7 @@ package com.vansh.offlineupimesh.service;
 import com.vansh.offlineupimesh.entity.Account;
 import com.vansh.offlineupimesh.exception.AccountNotFoundException;
 import com.vansh.offlineupimesh.exception.InvalidAmountException;
+import com.vansh.offlineupimesh.exception.InsufficientBalanceException;
 import com.vansh.offlineupimesh.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
@@ -65,5 +66,22 @@ public class AccountService {
         Account updatedAccount = accountRepository.save(account);
         return updatedAccount;
 
+    }
+
+    public Account withdrawMoney(String accountNumber, BigDecimal amount) {
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidAmountException("Withdraw amount must be greater than zero");
+        }
+        if (amount.compareTo(account.getBalance()) > 0) {
+            throw new InsufficientBalanceException("Insufficient balance");
+        }
+
+        account.setBalance(account.getBalance().subtract(amount));
+
+        Account updatedAccount = accountRepository.save(account);
+
+        return updatedAccount;
     }
 }
