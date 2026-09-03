@@ -5,6 +5,7 @@ import com.vansh.offlineupimesh.exception.AccountNotFoundException;
 import com.vansh.offlineupimesh.exception.InvalidAmountException;
 import com.vansh.offlineupimesh.exception.InsufficientBalanceException;
 import com.vansh.offlineupimesh.repository.AccountRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -83,5 +84,29 @@ public class AccountService {
         Account updatedAccount = accountRepository.save(account);
 
         return updatedAccount;
+    }
+
+    @Transactional
+    public Account transferMoney(
+            String senderAccountNumber,
+            String receiverAccountNumber,
+            BigDecimal amount) {
+        Account sender = accountRepository.findByAccountNumber(senderAccountNumber)
+                .orElseThrow(() -> new AccountNotFoundException("Sender account not found"));
+        Account receiver = accountRepository.findByAccountNumber(receiverAccountNumber)
+                .orElseThrow(() -> new AccountNotFoundException("Receiver account not found"));
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidAmountException("Transfer amount must be greater than zero");
+        }
+        if (amount.compareTo(sender.getBalance()) > 0) {
+            throw new InsufficientBalanceException("Insufficient balance");
+        }
+        sender.setBalance(sender.getBalance().subtract(amount));
+        receiver.setBalance(receiver.getBalance().add(amount));
+
+        accountRepository.save(sender);
+        accountRepository.save(receiver);
+
+        return sender;
     }
 }

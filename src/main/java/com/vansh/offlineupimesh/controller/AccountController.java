@@ -1,4 +1,5 @@
 package com.vansh.offlineupimesh.controller;
+import com.vansh.offlineupimesh.dto.TransferRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,6 +49,18 @@ public class AccountController {
             @RequestBody DepositRequest request) {
         return accountService.withdrawMoney(
                 accountNumber,
+                request.getAmount()
+        );
+    }
+
+    @PostMapping("/{accountNumber}/transfer")
+    public Account transferMoney(
+            @PathVariable("accountNumber") String accountNumber,
+            @RequestBody TransferRequest request) {
+
+        return accountService.transferMoney(
+                accountNumber,
+                request.getReceiverAccountNumber(),
                 request.getAmount()
         );
     }
