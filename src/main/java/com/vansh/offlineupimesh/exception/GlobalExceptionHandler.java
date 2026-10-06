@@ -19,4 +19,10 @@ public class GlobalExceptionHandler {
     public String handleInvalidAmount(InvalidAmountException exception) {
         return exception.getMessage();
     }
+
+    @ExceptionHandler(TransactionNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleTransactionNotFound(TransactionNotFoundException ex) {
+        return ex.getMessage();
+    }
 }

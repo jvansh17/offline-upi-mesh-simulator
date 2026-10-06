@@ -4,6 +4,7 @@ import com.vansh.offlineupimesh.entity.Account;
 import com.vansh.offlineupimesh.exception.AccountNotFoundException;
 import com.vansh.offlineupimesh.exception.InvalidAmountException;
 import com.vansh.offlineupimesh.exception.InsufficientBalanceException;
+import com.vansh.offlineupimesh.exception.TransactionNotFoundException;
 import com.vansh.offlineupimesh.repository.AccountRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
@@ -138,6 +139,16 @@ public class AccountService {
                 .findBySenderAccountNumberOrReceiverAccountNumberOrderByTimestampDesc(
                         accountNumber,
                         accountNumber
+                );
+    }
+
+    public Transaction getTransactionById(Long id) {
+
+        return transactionRepository.findById(id)
+                .orElseThrow(() ->
+                        new TransactionNotFoundException(
+                                "Transaction not found"
+                        )
                 );
     }
 }
