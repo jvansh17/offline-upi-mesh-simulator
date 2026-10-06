@@ -10,6 +10,8 @@ import com.vansh.offlineupimesh.entity.Account;
 import com.vansh.offlineupimesh.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import com.vansh.offlineupimesh.entity.Transaction;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -63,5 +65,12 @@ public class AccountController {
                 request.getReceiverAccountNumber(),
                 request.getAmount()
         );
+    }
+
+    @GetMapping("/{accountNumber}/transactions")
+    public List<Transaction> getTransactionHistory(
+            @PathVariable("accountNumber") String accountNumber) {
+
+        return accountService.getTransactionHistory(accountNumber);
     }
 }
