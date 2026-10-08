@@ -14,6 +14,7 @@ import java.util.Base64;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.MessageDigest;
 
 @Service
 public class EncryptionService {
@@ -95,5 +96,16 @@ public class EncryptionService {
         keyPairGenerator.initialize(2048);
 
         return keyPairGenerator.generateKeyPair();
+    }
+
+    public String generateHash(String data) throws Exception {
+
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+        byte[] hashBytes = digest.digest(
+                data.getBytes(StandardCharsets.UTF_8)
+        );
+
+        return Base64.getEncoder().encodeToString(hashBytes);
     }
 }
